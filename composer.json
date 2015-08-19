@@ -1,5 +1,5 @@
 {
-    "name": "burthorpe/signatures",
+    "name": "burthorpe/runescape-signatures",
     "description": "Runescape stats forum signatures",
     "require": {
         "burthorpe/runescape-api": "dev-master"
