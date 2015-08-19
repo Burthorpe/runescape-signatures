@@ -1,17 +1,20 @@
 {
-    "name": "burthorpe/runescape-signatures",
-    "description": "Runescape stats forum signatures",
-    "require": {
-        "burthorpe/runescape-api": "dev-master"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^4.8"
-    },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Wade Urry",
-            "email": "wader@iwader.co.uk"
-        }
-    ]
+  "name": "burthorpe/runescape-signatures",
+  "description": "Runescape stats forum signatures",
+  "keywords": ["burthorpe", "runescape", "jagex"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Wade Urry",
+      "email": "wader@iwader.co.uk",
+      "homepage": "http://iwader.co.uk"
+    }
+  ],
+  "require": {
+    "burthorpe/runescape-api": "dev-master"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.8"
+  },
+  "minimum-stability": "dev"
 }
