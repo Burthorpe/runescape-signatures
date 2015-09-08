@@ -83,7 +83,23 @@ class Signature {
 
         $stats = $this->getStats();
 
-        $image->text('Hello World', 10, 20, $this->fontCallback());
+        $image->insert($this->getSkillIconFile('attack'), 'top-left', 30, 10);
+        $image->text($stats->get('attack')->get('level'), 10, 22, $this->fontCallback());
+
+        $image->insert($this->getSkillIconFile('strength'), 'top-left', 30, 31);
+        $image->text($stats->get('strength')->get('level'), 10, 44, $this->fontCallback());
+
+        $image->insert($this->getSkillIconFile('defence'), 'top-left', 30, 53);
+        $image->text($stats->get('defence')->get('level'), 10, 66, $this->fontCallback());
+
+        $image->insert($this->getSkillIconFile('constitution'), 'top-left', 30, 77);
+        $image->text($stats->get('constitution')->get('level'), 10, 89, $this->fontCallback());
+
+        $image->insert($this->getSkillIconFile('ranged'), 'top-left', 30, 100);
+        $image->text($stats->get('ranged')->get('level'), 10, 111, $this->fontCallback());
+
+        $image->insert($this->getSkillIconFile('prayer'), 'top-left', 30, 121);
+        $image->text($stats->get('prayer')->get('level'), 10, 134, $this->fontCallback());
     }
 
     /**
@@ -102,6 +118,10 @@ class Signature {
             $font->color(
                 $this->getFontColour()
             );
+
+            $font->size(
+                $this->getFontSize()
+            );
         };
     }
 
@@ -116,7 +136,8 @@ class Signature {
 
         return $this->image = $this->imageManager->canvas(
             350,
-            150
+            150,
+            '888888'
         );
     }
 
@@ -145,13 +166,37 @@ class Signature {
     }
 
     /**
+     * Get the path to the resources directory
+     *
+     * @param string $path
+     * @return string
+     */
+    protected function getResourcesPath($path = '')
+    {
+        return __DIR__ . '/Resources/' . $path;
+    }
+
+    /**
      * Get the path to the font file
      *
      * @return string
      */
     protected function getFontFile()
     {
-        return __DIR__ . '/Fonts/OpenSans/OpenSans-Regular.ttf';
+        return $this->getResourcesPath('/Fonts/OpenSans/OpenSans-Bold.ttf');
+    }
+
+    /**
+     * Get the path to the given skill icon
+     *
+     * @param string $skill
+     * @return string
+     */
+    protected function getSkillIconFile($skill)
+    {
+        return $this->getResourcesPath(
+            sprintf('/Images/Skills/%s.png', strtolower($skill))
+        );
     }
 
     /**
@@ -162,6 +207,16 @@ class Signature {
     protected function getFontColour()
     {
         return '111111';
+    }
+
+    /**
+     * Get the font size to be rendered
+     *
+     * @return int
+     */
+    protected function getFontSize()
+    {
+        return 14;
     }
 
 }
