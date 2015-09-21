@@ -4,22 +4,17 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "db99ab89dd81f57d4d5812fcbd7f53d9",
-    "content-hash": "578c39b645bf865cdf8b5a5c9c3a7480",
+    "hash": "a86aa42d667828379d9cc1f7e7f32be7",
+    "content-hash": "9eb760bcbbd22a8b63d359d12ce2a37b",
     "packages": [
         {
             "name": "burthorpe/runescape-api",
             "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Burthorpe/runescape-api.git",
-                "reference": "ab1191bad8e51a8213abae837635d64c40afe269"
-            },
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Burthorpe/runescape-api/zipball/ab1191bad8e51a8213abae837635d64c40afe269",
-                "reference": "ab1191bad8e51a8213abae837635d64c40afe269",
-                "shasum": ""
+                "type": "path",
+                "url": "/Users/wade/Code/burthorpe/runescape-api/",
+                "reference": "a8bc9ac50fb9de7971ca237392189042e37ce434",
+                "shasum": null
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.1",
@@ -36,7 +31,6 @@
                     "Burthorpe\\Runescape\\Integrations\\Laravel\\": "src/Burthorpe/Runescape/Integrations/Laravel"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -52,8 +46,7 @@
                 "burthorpe",
                 "jagex",
                 "runescape"
-            ],
-            "time": "2015-02-01 14:43:26"
+            ]
         },
         {
             "name": "danielstjules/stringy",

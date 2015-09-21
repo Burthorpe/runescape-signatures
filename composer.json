@@ -11,12 +11,18 @@
     }
   ],
   "require": {
-    "burthorpe/runescape-api": "dev-master",
+    "burthorpe/runescape-api": "*@dev",
     "intervention/image": "~2.3"
   },
   "require-dev": {
     "phpunit/phpunit": "^4.8"
   },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../runescape-api"
+    }
+  ],
   "autoload": {
     "psr-4": {
       "Burthorpe\\Runescape\\Signature\\": "src/Burthorpe/Runescape/Signature"
