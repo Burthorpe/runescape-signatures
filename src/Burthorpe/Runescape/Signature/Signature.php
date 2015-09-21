@@ -1,13 +1,13 @@
 <?php namespace Burthorpe\Runescape\Signature;
 
-use Burthorpe\Runescape\EvolutionOfCombat;
+use Burthorpe\Runescape\RS3\API as RS3;
 use Intervention\Image\AbstractFont;
 use Intervention\Image\ImageManager;
 
 class Signature {
 
     /**
-     * @var \Burthorpe\Runescape\EvolutionOfCombat
+     * @var \Burthorpe\Runescape\RS3\API
      */
     protected $api;
 
@@ -36,7 +36,7 @@ class Signature {
      */
     public function __construct($username)
     {
-        $this->api = new EvolutionOfCombat();
+        $this->api = new RS3();
         $this->imageManager = new ImageManager([
             'driver' => 'imagick'
         ]);
@@ -93,11 +93,15 @@ class Signature {
     /**
      * Render the image
      *
-     * @return
+     * @return void
      */
     protected function draw()
     {
-        foreach($this->api->)
+        $this->api->getSkills()->each(function($skill)
+        {
+            die($skill);
+        });
+
         $this->drawSkill('attack');
         $this->drawSkill('strength');
 
