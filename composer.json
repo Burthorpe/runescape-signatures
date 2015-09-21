@@ -22,5 +22,5 @@
       "Burthorpe\\Runescape\\Signature\\": "src/Burthorpe/Runescape/Signature"
     }
   },
-  "minimum-stability": "dev"
+  "minimum-stability": "stable"
 }
