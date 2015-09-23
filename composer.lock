@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a86aa42d667828379d9cc1f7e7f32be7",
-    "content-hash": "9eb760bcbbd22a8b63d359d12ce2a37b",
+    "hash": "aa37451da961c0cb4340832b022b739a",
+    "content-hash": "63c52ffc0a700a40c3440f538e779f60",
     "packages": [
         {
             "name": "burthorpe/runescape-api",
