@@ -141,6 +141,18 @@ class Signature {
                     );
             }
         });
+
+        $this->drawWatermark();
+    }
+
+    /**
+     * Draw the URL watermark on the image
+     *
+     * @return void
+     */
+    protected function drawWatermark()
+    {
+        $this->getImage()->text('burthorpe.com', 240, 145, $this->fontCallback());
     }
 
     /**
