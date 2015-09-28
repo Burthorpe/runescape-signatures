@@ -2,7 +2,7 @@
 
 require '../vendor/autoload.php';
 
-$signature = new \Burthorpe\Runescape\Signature\Signature('iWader');
+$signature = new \Burthorpe\Runescape\Signature\Signature('Drumgun');
 
 $signature->run();
 
