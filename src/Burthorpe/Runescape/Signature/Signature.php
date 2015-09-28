@@ -72,11 +72,6 @@ class Signature {
         return $this->getImage()->psrResponse('png', 90);
     }
 
-    protected function drawOverall()
-    {
-
-    }
-
     /**
      * Render the given skill onto the image
      *
@@ -131,8 +126,7 @@ class Signature {
             switch(mb_strtolower($skill->get('name')))
             {
                 case 'overall';
-                    $this->drawOverall();
-                    break;
+                    break; // Skip
                 default:
                     $this->drawSkill(
                         $skill,
@@ -142,7 +136,106 @@ class Signature {
             }
         });
 
+        $this->drawUserArea(
+            $this->getDrawLocationX(25)
+        );
+
         $this->drawWatermark();
+    }
+
+    /**
+     * Draw the users name, overall level, rank and combat level
+     *
+     * @return void
+     */
+    protected function drawUserArea($x)
+    {
+        $skill = $this->getStats()->get('overall');
+
+        $this->drawCombatLevel(
+
+        );
+        $this->drawOverallLevel($skill->get('level'), $x, 95);
+        $this->drawOverallRank($skill->get('rank'), $x, 110);
+        $this->drawOverallXp($skill->get('xp'), $x, 125);
+    }
+
+    protected function drawCombatLevel($level, $x, $y)
+    {
+        $this->getImage()->text(
+            sprintf('Combat: %s', $level),
+            $x,
+            $y,
+            $this->fontCallback(
+                $this->getResourcesPath('Fonts/OpenSans/OpenSans-Regular.ttf')
+            )
+        );
+    }
+
+    /**
+     * Draw the users overall level
+     *
+     * @param $level
+     * @param $x
+     * @param $y
+     * @return void
+     */
+    protected function drawOverallLevel($level, $x, $y)
+    {
+        $level = number_format($level, 0);
+
+        $this->getImage()->text(
+            sprintf('Overall: %s', $level),
+            $x,
+            $y,
+            $this->fontCallback(
+                $this->getResourcesPath('Fonts/OpenSans/OpenSans-Regular.ttf')
+            )
+        );
+    }
+
+    /**
+     * Draw the users overall rank
+     *
+     * @param $rank
+     * @param $x
+     * @param $y
+     * @return void
+     */
+    protected function drawOverallRank($rank, $x, $y)
+    {
+        $rank = number_format($rank, 0);
+
+        $this->getImage()->text(
+            sprintf('Rank: %s', $rank),
+            $x,
+            $y,
+            $this->fontCallback(
+                $this->getResourcesPath('Fonts/OpenSans/OpenSans-Regular.ttf')
+            )
+        );
+    }
+
+    /**
+     * Draw the users overall experience
+     *
+     * @param $xp
+     * @param $x
+     * @param $y
+     * @return void
+     */
+    protected function drawOverallXp($xp, $x, $y)
+    {
+        $xp = number_format($xp, 0);
+
+        $this->getImage()->text(
+            sprintf('XP: %s', $xp),
+            $x,
+            $y,
+            $this->fontCallback(
+                $this->getResourcesPath('Fonts/OpenSans/OpenSans-Regular.ttf')
+            )
+        );
     }
 
     /**
@@ -152,7 +245,9 @@ class Signature {
      */
     protected function drawWatermark()
     {
-        $this->getImage()->text('burthorpe.com', 240, 145, $this->fontCallback());
+        $this->getImage()->text('burthorpe.com', 250, 145, $this->fontCallback(
+            $this->getResourcesPath('Fonts/OpenSans/OpenSans-Light.ttf')
+        ));
     }
 
     /**
@@ -160,20 +255,20 @@ class Signature {
      *
      * @return \Closure
      */
-    protected function fontCallback()
+    protected function fontCallback($fontFile = null, $colour = null, $size = null)
     {
-        return function (AbstractFont $font)
+        return function (AbstractFont $font) use ($fontFile, $colour, $size)
         {
             $font->file(
-                $this->getFontFile()
+                (! is_null($fontFile) ? $fontFile : $this->getFontFile())
             );
 
             $font->color(
-                $this->getFontColour()
+                (! is_null($colour) ? $colour : $this->getFontColour())
             );
 
             $font->size(
-                $this->getFontSize()
+                (! is_null($size) ? $size : $this->getFontSize())
             );
         };
     }
