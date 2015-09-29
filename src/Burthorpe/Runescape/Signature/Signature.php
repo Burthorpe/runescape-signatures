@@ -153,16 +153,58 @@ class Signature
      */
     protected function drawUserArea($x)
     {
-        $skill = $this->getStats()->get('overall');
+        $this->drawDisplayName($this->username, $x, 70);
 
         $this->drawCombatLevel(
-
+            $this->api->calculateCombatLevel(
+                $this->getStats()->get('attack')->get('level'),
+                $this->getStats()->get('strength')->get('level'),
+                $this->getStats()->get('magic')->get('level'),
+                $this->getStats()->get('ranged')->get('level'),
+                $this->getStats()->get('defence')->get('level'),
+                $this->getStats()->get('constitution')->get('level'),
+                $this->getStats()->get('prayer')->get('level'),
+                $this->getStats()->get('summoning')->get('level')
+            ),
+            $x,
+            85
         );
-        $this->drawOverallLevel($skill->get('level'), $x, 95);
-        $this->drawOverallRank($skill->get('rank'), $x, 110);
-        $this->drawOverallXp($skill->get('xp'), $x, 125);
+
+        $overall = $this->getStats()->get('overall');
+
+        $this->drawOverallLevel($overall->get('level'), $x, 100);
+        $this->drawOverallRank($overall->get('rank'), $x, 115);
+        $this->drawOverallXp($overall->get('xp'), $x, 130);
     }
 
+    /**
+     * Draw the users display name.
+     *
+     * @param $name
+     * @param $x
+     * @param $y
+     *
+     * @return void
+     */
+    protected function drawDisplayName($name, $x, $y)
+    {
+        $this->getImage()->text(
+            $name,
+            $x,
+            $y,
+            $this->fontCallback(null, null, 18)
+        );
+    }
+
+    /**
+     * Draw the users combat level.
+     *
+     * @param $level
+     * @param $x
+     * @param $y
+     *
+     * @return void
+     */
     protected function drawCombatLevel($level, $x, $y)
     {
         $this->getImage()->text(
