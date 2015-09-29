@@ -1,11 +1,13 @@
-<?php namespace Burthorpe\Runescape\Signature;
+<?php
+
+namespace Burthorpe\Runescape\Signature;
 
 use Burthorpe\Runescape\RS3\API as RS3;
 use Intervention\Image\AbstractFont;
 use Intervention\Image\ImageManager;
 
-class Signature {
-
+class Signature
+{
     /**
      * @var \Burthorpe\Runescape\RS3\API
      */
@@ -38,14 +40,14 @@ class Signature {
     {
         $this->api = new RS3();
         $this->imageManager = new ImageManager([
-            'driver' => 'imagick'
+            'driver' => 'imagick',
         ]);
 
         $this->username = $username;
     }
 
     /**
-     * Bootstrap the rendering process
+     * Bootstrap the rendering process.
      */
     public function run()
     {
@@ -53,7 +55,7 @@ class Signature {
     }
 
     /**
-     * Serve the image via. HTTP
+     * Serve the image via. HTTP.
      *
      * @return mixed
      */
@@ -63,7 +65,7 @@ class Signature {
     }
 
     /**
-     * Return a PSR-7 compatible HTTP response
+     * Return a PSR-7 compatible HTTP response.
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -73,11 +75,12 @@ class Signature {
     }
 
     /**
-     * Render the given skill onto the image
+     * Render the given skill onto the image.
      *
      * @param string $skill
-     * @param int $x
-     * @param int $y
+     * @param int    $x
+     * @param int    $y
+     *
      * @return void
      */
     protected function drawSkill($skill, $x = 0, $y = 0)
@@ -91,9 +94,10 @@ class Signature {
     }
 
     /**
-     * Get the x-axis coordinate to start drawing from depending on the skill given
+     * Get the x-axis coordinate to start drawing from depending on the skill given.
      *
      * @param $skillId
+     *
      * @return int
      */
     protected function getDrawLocationX($skillId)
@@ -102,9 +106,10 @@ class Signature {
     }
 
     /**
-     * Get the y-axis coordinate to start drawing from depending on the skill given
+     * Get the y-axis coordinate to start drawing from depending on the skill given.
      *
      * @param $skillId
+     *
      * @return int
      */
     protected function getDrawLocationY($skillId)
@@ -113,18 +118,16 @@ class Signature {
     }
 
     /**
-     * Render the image
+     * Render the image.
      *
      * @return void
      */
     protected function draw()
     {
-        $this->api->getSkills()->each(function($skill)
-        {
+        $this->api->getSkills()->each(function ($skill) {
             $id = $skill->get('id');
 
-            switch(mb_strtolower($skill->get('name')))
-            {
+            switch (mb_strtolower($skill->get('name'))) {
                 case 'overall';
                     break; // Skip
                 default:
@@ -144,7 +147,7 @@ class Signature {
     }
 
     /**
-     * Draw the users name, overall level, rank and combat level
+     * Draw the users name, overall level, rank and combat level.
      *
      * @return void
      */
@@ -173,11 +176,12 @@ class Signature {
     }
 
     /**
-     * Draw the users overall level
+     * Draw the users overall level.
      *
      * @param $level
      * @param $x
      * @param $y
+     *
      * @return void
      */
     protected function drawOverallLevel($level, $x, $y)
@@ -195,11 +199,12 @@ class Signature {
     }
 
     /**
-     * Draw the users overall rank
+     * Draw the users overall rank.
      *
      * @param $rank
      * @param $x
      * @param $y
+     *
      * @return void
      */
     protected function drawOverallRank($rank, $x, $y)
@@ -217,11 +222,12 @@ class Signature {
     }
 
     /**
-     * Draw the users overall experience
+     * Draw the users overall experience.
      *
      * @param $xp
      * @param $x
      * @param $y
+     *
      * @return void
      */
     protected function drawOverallXp($xp, $x, $y)
@@ -239,7 +245,7 @@ class Signature {
     }
 
     /**
-     * Draw the URL watermark on the image
+     * Draw the URL watermark on the image.
      *
      * @return void
      */
@@ -251,36 +257,37 @@ class Signature {
     }
 
     /**
-     * Get the callback to be used when rendering the text in the image
+     * Get the callback to be used when rendering the text in the image.
      *
      * @return \Closure
      */
     protected function fontCallback($fontFile = null, $colour = null, $size = null)
     {
-        return function (AbstractFont $font) use ($fontFile, $colour, $size)
-        {
+        return function (AbstractFont $font) use ($fontFile, $colour, $size) {
             $font->file(
-                (! is_null($fontFile) ? $fontFile : $this->getFontFile())
+                (!is_null($fontFile) ? $fontFile : $this->getFontFile())
             );
 
             $font->color(
-                (! is_null($colour) ? $colour : $this->getFontColour())
+                (!is_null($colour) ? $colour : $this->getFontColour())
             );
 
             $font->size(
-                (! is_null($size) ? $size : $this->getFontSize())
+                (!is_null($size) ? $size : $this->getFontSize())
             );
         };
     }
 
     /**
-     * Get the image resource being used
+     * Get the image resource being used.
      *
      * @return \Intervention\Image\Image
      */
     protected function getImage()
     {
-        if ($this->image) return $this->image;
+        if ($this->image) {
+            return $this->image;
+        }
 
         return $this->image = $this->imageManager->canvas(
             350,
@@ -290,7 +297,7 @@ class Signature {
     }
 
     /**
-     * Get the users display name
+     * Get the users display name.
      *
      * @return null|string
      */
@@ -300,30 +307,28 @@ class Signature {
     }
 
     /**
-     * Get the users skills stats
+     * Get the users skills stats.
      *
      * @return \Illuminate\Support\Collection
      */
     protected function getStats($skill = null)
     {
-        if ($this->stats)
-        {
+        if ($this->stats) {
             $stats = $this->stats;
-        }
-        else
-        {
+        } else {
             $stats = $this->api->stats(
                 $this->getUsername()
             );
         }
 
-        return (! is_null($skill) ? $stats->get($skill->get('name')) : $stats);
+        return (!is_null($skill) ? $stats->get($skill->get('name')) : $stats);
     }
 
     /**
-     * Return the users level for the given skill
+     * Return the users level for the given skill.
      *
      * @param string $skill
+     *
      * @return int
      */
     protected function getLevel($skill)
@@ -332,18 +337,19 @@ class Signature {
     }
 
     /**
-     * Get the path to the resources directory
+     * Get the path to the resources directory.
      *
      * @param string $path
+     *
      * @return string
      */
     protected function getResourcesPath($path = '')
     {
-        return __DIR__ . '/Resources' . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+        return __DIR__.'/Resources'.($path ? DIRECTORY_SEPARATOR.$path : $path);
     }
 
     /**
-     * Get the path to the font file
+     * Get the path to the font file.
      *
      * @return string
      */
@@ -353,9 +359,10 @@ class Signature {
     }
 
     /**
-     * Get the path to the given skill icon
+     * Get the path to the given skill icon.
      *
      * @param string $skill
+     *
      * @return string
      */
     protected function getSkillIconFile($skill)
@@ -366,7 +373,7 @@ class Signature {
     }
 
     /**
-     * Get the colour to be used for the font
+     * Get the colour to be used for the font.
      *
      * @return string
      */
@@ -376,7 +383,7 @@ class Signature {
     }
 
     /**
-     * Get the font size to be rendered
+     * Get the font size to be rendered.
      *
      * @return int
      */
@@ -384,5 +391,4 @@ class Signature {
     {
         return 14;
     }
-
 }
