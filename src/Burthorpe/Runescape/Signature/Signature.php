@@ -3,8 +3,20 @@
 namespace Burthorpe\Runescape\Signature;
 
 use Burthorpe\Runescape\RS3\API as RS3;
+use Burthorpe\Runescape\RS3\Skills\Attack;
+use Burthorpe\Runescape\RS3\Skills\Constitution;
+use Burthorpe\Runescape\RS3\Skills\Defence;
+use Burthorpe\Runescape\RS3\Skills\Dungeoneering;
+use Burthorpe\Runescape\RS3\Skills\Magic;
+use Burthorpe\Runescape\RS3\Skills\Overall;
+use Burthorpe\Runescape\RS3\Skills\Prayer;
+use Burthorpe\Runescape\RS3\Skills\Ranged;
+use Burthorpe\Runescape\RS3\Skills\Skill;
+use Burthorpe\Runescape\RS3\Skills\Strength;
+use Burthorpe\Runescape\RS3\Skills\Summoning;
 use Intervention\Image\AbstractFont;
 use Intervention\Image\ImageManager;
+use Burthorpe\Runescape\RS3\Skills\Contract as SkillContract;
 
 class Signature
 {
@@ -83,7 +95,7 @@ class Signature
      *
      * @return void
      */
-    protected function drawSkill($skill, $x = 0, $y = 0)
+    protected function drawSkill(SkillContract $skill, $x = 0, $y = 0)
     {
         $image = $this->getImage();
         $icon = $this->getSkillIconFile($skill);
@@ -100,9 +112,9 @@ class Signature
      *
      * @return int
      */
-    protected function getDrawLocationX($skillId)
+    protected function getDrawLocationX(SkillContract $skill)
     {
-        return 10 + (floor(max($skillId - 1, 0) / 6) * 50);
+        return 10 + (floor(max($skill->getId() - 1, 0) / 6) * 50);
     }
 
     /**
@@ -112,9 +124,9 @@ class Signature
      *
      * @return int
      */
-    protected function getDrawLocationY($skillId)
+    protected function getDrawLocationY(SkillContract $skill)
     {
-        return 22 + (22 * (max($skillId - 1, 0) % 6));
+        return 22 + (22 * (max($skill->getId() - 1, 0) % 6));
     }
 
     /**
@@ -124,23 +136,21 @@ class Signature
      */
     protected function draw()
     {
-        $this->api->getSkills()->each(function ($skill) {
-            $id = $skill->get('id');
-
-            switch (mb_strtolower($skill->get('name'))) {
+        $this->api->getSkills()->each(function (SkillContract $skill) {
+            switch ($skill->getName()) {
                 case 'overall';
                     break; // Skip
                 default:
                     $this->drawSkill(
                         $skill,
-                        $this->getDrawLocationX($id),
-                        $this->getDrawLocationY($id)
+                        $this->getDrawLocationX($skill),
+                        $this->getDrawLocationY($skill)
                     );
             }
         });
 
         $this->drawUserArea(
-            $this->getDrawLocationX(25)
+            $this->getDrawLocationX(new Dungeoneering())
         );
 
         $this->drawWatermark();
@@ -157,20 +167,20 @@ class Signature
 
         $this->drawCombatLevel(
             $this->api->calculateCombatLevel(
-                $this->getStats()->get('attack')->get('level'),
-                $this->getStats()->get('strength')->get('level'),
-                $this->getStats()->get('magic')->get('level'),
-                $this->getStats()->get('ranged')->get('level'),
-                $this->getStats()->get('defence')->get('level'),
-                $this->getStats()->get('constitution')->get('level'),
-                $this->getStats()->get('prayer')->get('level'),
-                $this->getStats()->get('summoning')->get('level')
+                $this->getStats(new Attack())->get('level'),
+                $this->getStats(new Strength())->get('level'),
+                $this->getStats(new Magic())->get('level'),
+                $this->getStats(new Ranged())->get('level'),
+                $this->getStats(new Defence())->get('level'),
+                $this->getStats(new Constitution())->get('level'),
+                $this->getStats(new Prayer())->get('level'),
+                $this->getStats(new Summoning())->get('level')
             ),
             $x,
             85
         );
 
-        $overall = $this->getStats()->get('overall');
+        $overall = $this->getStats(new Overall());
 
         $this->drawOverallLevel($overall->get('level'), $x, 100);
         $this->drawOverallRank($overall->get('rank'), $x, 115);
@@ -353,7 +363,7 @@ class Signature
      *
      * @return \Illuminate\Support\Collection
      */
-    protected function getStats($skill = null)
+    protected function getStats(SkillContract $skill = null)
     {
         if ($this->stats) {
             $stats = $this->stats;
@@ -363,7 +373,7 @@ class Signature
             );
         }
 
-        return (!is_null($skill) ? $stats->get($skill->get('name')) : $stats);
+        return (! is_null($skill) ? $stats->get($skill->getName()) : $stats);
     }
 
     /**
@@ -373,9 +383,9 @@ class Signature
      *
      * @return int
      */
-    protected function getLevel($skill)
+    protected function getLevel(SkillContract $skill)
     {
-        return $this->getStats()->get($skill)->get('level');
+        return $this->getStats()->get($skill->getName())->get('level');
     }
 
     /**
@@ -407,10 +417,10 @@ class Signature
      *
      * @return string
      */
-    protected function getSkillIconFile($skill)
+    protected function getSkillIconFile(SkillContract $skill)
     {
         return $this->getResourcesPath(
-            sprintf('Images/Skills/%s.png', strtolower($skill->get('name')))
+            sprintf('Images/Skills/%s.png', strtolower($skill->getName()))
         );
     }
 
