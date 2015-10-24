@@ -335,7 +335,7 @@ class Signature
      *
      * @return \Intervention\Image\Image
      */
-    protected function getImage()
+    public function getImage()
     {
         if ($this->image) {
             return $this->image;
